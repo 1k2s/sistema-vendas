@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Listagem de Pedidos</title>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar-geral}"></div>
+<div class="container mt-4">
+    <h1>Pedidos</h1>
+
+    <div class="alert alert-danger" th:if="${erro != null}" th:text="${erro}"></div>
+    <a class="btn btn-secondary mb-3" th:href="@{/}">Voltar ao início</a>
+    <a class="btn btn-primary mb-3" th:href="@{/pedidos/novo}">Novo Pedido</a>
+
+    <table class="table table-bordered table-striped">
+        <thead class="thead-dark">
+        <tr>
+            <th>Nº</th>
+            <th>Cliente</th>
+            <th>Data</th>
+            <th>Valor Total</th>
+            <th>Status</th>
+            <th>Versão</th>
+            <th>Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="pedido : ${pedidos}">
+            <td th:text="${pedido.id}"></td>
+            <td th:text="${pedido.cliente.nome}"></td>
+            <td th:text="${#temporals.format(pedido.dataPedido, 'dd/MM/yyyy HH:mm')}"></td>
+            <td th:text="${'R$ ' + #numbers.formatDecimal(pedido.valorTotal, 1, 'POINT', 2, 'COMMA')}"></td>
+            <td>
+                <span class="badge"
+                      th:classappend="${pedido.status.name() == 'ATIVO'} ? 'bg-success' : 'bg-secondary'"
+                      th:text="${pedido.status}"></span>
+            </td>
+            <td th:text="${pedido.version}"></td>
+            <td>
+                <a class="btn btn-sm btn-info" th:href="@{/pedidos/detalhes/{id}(id=${pedido.id})}">Detalhes</a>
+                <th:block th:if="${pedido.status.name() == 'ATIVO'}">
+                    <a class="btn btn-sm btn-warning" th:href="@{/pedidos/edit/{id}(id=${pedido.id})}">Editar</a>
+                    <a class="btn btn-sm btn-danger" th:href="@{/pedidos/cancelar/{id}(id=${pedido.id})}">Cancelar</a>
+                </th:block>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(pedidos)}">
+            <td colspan="7" class="text-center">Nenhum pedido cadastrado.</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

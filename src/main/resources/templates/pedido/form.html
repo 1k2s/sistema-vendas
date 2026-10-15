@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-br"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security6">
+<head>
+    <meta charset="UTF-8">
+    <title>Novo Pedido</title>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar-geral}"></div>
+<div class="container mt-5">
+    <h2>Novo Pedido</h2>
+
+    <div class="alert alert-warning" th:if="${#lists.isEmpty(clientes)}">
+        Nenhum cliente cadastrado.
+        <a th:href="@{/clientes/novo}" sec:authorize="hasRole('ADMIN')">Cadastre um cliente</a>
+        <span sec:authorize="!hasRole('ADMIN')">Peça a um administrador para cadastrar um cliente</span>
+        antes de criar um pedido.
+    </div>
+
+    <form th:action="@{/pedidos/novo}" method="post">
+        <div class="mb-3">
+            <label for="clienteId" class="form-label">Cliente</label>
+            <select class="form-select" id="clienteId" name="clienteId" required>
+                <option value="">Selecione o cliente</option>
+                <option th:each="cliente : ${clientes}"
+                        th:value="${cliente.id}"
+                        th:text="${cliente.nome + ' - ' + cliente.cpf}"></option>
+            </select>
+        </div>
+
+        <p class="text-muted">Após criar o pedido você será direcionado para a tela de inclusão de itens.</p>
+
+        <button type="submit" class="btn btn-primary">Criar Pedido</button>
+        <a th:href="@{/pedidos}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+</body>
+</html>

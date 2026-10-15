@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-br"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security6">
+<head>
+    <meta charset="UTF-8">
+    <title>Sistema de Vendas</title>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar-geral}"></div>
+<div class="container mt-5">
+    <h1 class="mb-4">Sistema de Vendas</h1>
+
+    <div class="row g-3">
+        <div class="col-md-4" sec:authorize="hasRole('ADMIN')">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Clientes</h5>
+                    <p class="card-text">Cadastro, edição e exclusão de clientes.</p>
+                    <a class="btn btn-primary" th:href="@{/clientes}">Acessar</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4" sec:authorize="hasRole('ADMIN')">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Produtos</h5>
+                    <p class="card-text">Cadastro de produtos e controle de estoque.</p>
+                    <a class="btn btn-primary" th:href="@{/produtos}">Acessar</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4" sec:authorize="hasAnyRole('ADMIN', 'PADRAO')">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Pedidos</h5>
+                    <p class="card-text">Criação, edição e cancelamento de pedidos.</p>
+                    <a class="btn btn-primary" th:href="@{/pedidos}">Acessar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
